@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Header from '../../common/header/Header';
-import { Card, CardContent,CardActions, ClickAwayListener} from '@material-ui/core';
+import { Card, CardContent,CardActions} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
@@ -123,7 +123,7 @@ addToCart = (item, category) => {
           this.snackBarHandler("Item removed from cart!");
       }else{
           myCartItem.itemList[index] = findItem;
-          this.snackBarHandler("Item quantity decreased by 1!");
+          this.snackBarHandler("Item quantity descreased by 1!");
       }
       this.setState({ cartItems: myCartItem});  
 
@@ -158,7 +158,6 @@ snackBarHandler = (message) => {
  this.setState({ snackBarOpen: false});
   this.setState({ snackBarMessage: message});
   this.setState({ snackBarOpen: true});
-  console.log(this.state.snackBarOpen);
 }
 
 //Checkout button
@@ -214,14 +213,14 @@ return(<div className="mainDiv">
           <Grid item container spacing={5}>
               <Grid item xs={7}  >
               <span style={{fontWeight:"bolder"}} className="cusRating"><i className="fa fa-star"></i> {this.state.resData.customer_rating}</span>
-              <span style={{display:"block",color:"grey",fontSize:20}}>AVERAGE RATING BY</span>
-              <span style={{color:"grey",fontSize:20}}><span style={{fontWeight:"bolder",color:"grey",fontSize:20}}>{this.state.resData.number_customers_rated} </span>CUSTOMERS</span>
+              <span className="textResDetails" style={{display:"block",color:"grey",fontSize:20}}>AVERAGE RATING BY</span>
+              <span  className="textResDetails" style={{color:"grey",fontSize:20}}><span className="textResDetails" style={{fontWeight:"bolder",color:"grey",fontSize:20}}>{this.state.resData.number_customers_rated} </span>CUSTOMERS</span>
             
               </Grid>
               <Grid item xs={5}>
             <span style={{fontWeight:"bolder"}} className="cusRating"><i className="fa fa-inr"></i>{this.state.resData.average_price}</span>
-              <span style={{display:"block",color:"grey",fontSize:20}}>AVERAGE COST FOR</span>
-              <span style={{color:"grey",fontSize:20}}>TWO PEOPLE</span>
+              <span className="textResDetails" style={{display:"block",color:"grey",fontSize:20}}>AVERAGE COST FOR</span>
+              <span className="textResDetails" style={{color:"grey",fontSize:20}}>TWO PEOPLE</span>
         
             </Grid>
         </Grid>
@@ -235,7 +234,7 @@ return(<div className="mainDiv">
 {
             return (<div key={"div"+category.id}><div key={"sub-div" + category.id}
             className="categoriesCart">{category.category_name} </div>
-            <Divider/>
+            <Divider/><br/>
             {
               category.item_list.map(item => {
               return(<div key={item.id}>
@@ -281,17 +280,17 @@ return(<div className="mainDiv">
                               </span>
                           </div> 
                               <div >
-                                <div  >
+                                <div  className="addRemove">
                                   <IconButton aria-label="Remove Item" onClick={this.removeAnItemFromCart.bind(this, cartItem, index)}>
                                       <RemoveIcon  style={{fontSize: 22, fontWeight:"bold", fill: 'black'}} />
                                   </IconButton>
-                                  <Typography variant="body" style={{fontSize: 20, fill: 'grey'}}>{cartItem.quantity}</Typography> 
+                                  <Typography style={{marginTop:"8%", fontSize: 20, fill: 'grey'}}>{cartItem.quantity}</Typography> 
                                   <IconButton aria-label="Add Item"  onClick={this.addAnItemFromCart.bind(this, cartItem, index)}>
                                       <AddIcon style={{fontSize: 22, fontWeight:"bold", fill: 'black'}}/>
                                   </IconButton>     
                                   </div>                                                              
                               </div>
-                              <div >
+                              <div style={{paddingTop:"2%"}}>
                                   <span style={{fontWeight:"bold", color:"grey", fontSize:"120%"}}><i className="fa fa-inr"></i>
                                   <span>  {cartItem.totalItemPrice}</span></span>                                                               
                               </div>                                                        
@@ -318,20 +317,19 @@ return(<div className="mainDiv">
             </CardActions>
 </Card></div>
 </div>
-<Snackbar 
+<Snackbar key={"snack"}
   anchorOrigin={{vertical: 'bottom', horizontal: 'left'}} 
   autoHideDuration={3000}
   open={this.state.snackBarOpen}
   onClose={() => this.setState({ snackBarOpen: false })}
   message={<span id="message-id">{this.state.snackBarMessage}</span>}
-  action={[
+  action={
             <IconButton
             color="inherit"
-                
                 >
                 <CloseIcon/>
             </IconButton>
-        ]}
+        }
   />
 </div>
 );
