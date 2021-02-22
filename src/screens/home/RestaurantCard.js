@@ -1,107 +1,53 @@
-import React, { Component } from "react";
-import Header from "../../common/header/Header";
-//import { Route, Link } from 'react-router-dom';
-import Details from "../details/Details";
-import * as Utils from "../../common/Utils";
-import * as Constants from "../../common/Constants";
-import RestaurantCard from "./RestaurantCard";
-import Grid from "@material-ui/core/Grid";
-import { withStyles } from "@material-ui/core/styles";
+import React from 'react';
+import "./RestaurantCard.css";
+import Card from '@material-ui/core/Card';
+//import CardActionArea from '@material-ui/core/CardActionArea';
+//import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Typography from '@material-ui/core/Typography';
+import { withRouter } from 'react-router-dom';
+import '../../assets/font-awesome-4.7.0/css/font-awesome.min.css';
 
-const styles = {
-  resCard: { width: "90%", cursor: "pointer" },
-};
 
-class Home extends Component {
-  constructor() {
-    super();
-    this.state = {
-      imageData: [],
-      data: [],
-    };
-  }
+const RestaurantCard = function(props){
+    // const image = props.image;
+    const index = props.index;
+	const classes = props.classes;	    	
 
-  componentDidMount() {
-    this.getAllImageData();
-  }
-
-  getAllImageData = () => {
-    const requestUrl = this.props.baseUrl + "restaurant";
-    const that = this;
-    Utils.makeApiCall(
-      requestUrl,
-      null,
-      null,
-      Constants.ApiRequestTypeEnum.GET,
-      null,
-      (responseText) => {
-        that.setState({
-          imageData: JSON.parse(responseText).restaurants,
-        });
-      },
-      () => {}
-    );
-  };
-
-  searchRestaurantsByName = (event) => {
-    const searchValue = event.target.value;
-    const requestUrl = this.props.baseUrl + "restaurant/name/" + searchValue;
-    const that = this;
-    if (!Utils.isEmpty(searchValue)) {
-      Utils.makeApiCall(
-        requestUrl,
-        null,
-        null,
-        Constants.ApiRequestTypeEnum.GET,
-        null,
-        (responseText) => {
-          that.setState({
-            imageData: JSON.parse(responseText).restaurants,
-          });
-        },
-        () => {}
-      );
-    } else {
-      this.getAllImageData();
-    }
-  };
-
-  render() {
-    const { classes } = this.props;
     return (
-      <div>
-        <Header
-          baseUrl={this.props.baseUrl}
-          searchRestaurantsByName={this.searchRestaurantsByName}
-          showSearch={true}
-          history={this.props.history}
-        />
-        <Grid container spacing={3} style={{ padding: "1% 2%" }}>
-          {Utils.isAnyValueOfObjectUndefinedOrNullOrEmpty(
-            this.state.imageData
-          ) ? (
-            <span>No restaurant with the given name</span>
-          ) : (
-            (this.state.imageData || []).map((resItem, index) => (
-              <Grid item xs={12} sm={3} key={index}>
-                <RestaurantCard
-                  resId={resItem.id}
-                  resURL={resItem.photo_URL}
-                  resName={resItem.restaurant_name}
-                  resFoodCategories={resItem.categories}
-                  resCustRating={resItem.customer_rating}
-                  resNumberCustRated={resItem.number_customers_rated}
-                  avgPrice={resItem.average_price}
-                  classes={classes}
-                  index={index}
-                />
-              </Grid>
-            ))
-          )}
-        </Grid>
-      </div>
-    );
-  }
+		<div className="cardContainer" onClick={() => {let detailsPageUrl = '/restaurant/'+ props.resId; return props.history.push(detailsPageUrl)}} key={index}>
+			<Card style={{width:"95%"}} className={classes.resCard} key={index}>			
+					<CardMedia
+						component="img"
+						alt={props.resName}
+						height="160"
+						image={props.resURL}
+					/>
+					<CardContent >
+						<Typography gutterBottom variant="h5" component="h2">
+							{props.resName}
+						</Typography>
+						<Typography style={{height:"18px"}}variant="body2" color="textSecondary">
+							{props.resFoodCategories}
+						</Typography>
+						<br />
+						<Typography variant="body2" component="div">
+							<div className="rating-main-contnr">
+								<div className="rating-bg-color">
+									<span><i className="fa fa-star"></i></span>
+									<span> {props.resCustRating} ({props.resNumberCustRated})</span>
+								</div>
+								<div className="avg-price">
+									<span><i className="fa fa-inr"></i> {props.avgPrice} for two</span>                            
+								</div>
+							</div>
+						</Typography>
+					</CardContent>						
+			</Card>
+		</div>
+    )
+
 }
 
-export default withStyles(styles)(Home);
+export default withRouter(RestaurantCard);
