@@ -26,8 +26,8 @@ class Home extends Component {
     componentDidMount() {
         this.getAllImageData();
     }
-
-    // Get all restuarants data
+    // Get data for All the Restuarants
+   
     getAllImageData = () => {
         const requestUrl = this.props.baseUrl + "restaurant";
         const that = this;
@@ -56,8 +56,8 @@ class Home extends Component {
         });
         window.location.reload();
     }
-
-    // Restaurant search by name
+    // Search the estuarants by Name
+   
     searchRestaurantsByName = event => {
         const searchValue = event.target.value;
         const requestUrl = this.props.baseUrl + "restaurant/name/" + searchValue;
